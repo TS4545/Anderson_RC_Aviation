@@ -3,7 +3,10 @@ float RateRoll, RatePitch, RateYaw;
 float AccX, AccY, AccZ;
 float AngleRoll, AnglePitch;
 float LoopTimer;
-bool armed = false;
+
+int buttonPin = 2;
+bool buttonState = false;
+bool toggle = false;
 
 void gyro_signals(void) 
 {
@@ -45,7 +48,7 @@ void gyro_signals(void)
 
 void parachute_event(void)
 { 
-  if(armed)
+  if(toggle)
   {
     digitalWrite(LED_BUILTIN, HIGH);  // turn the LED on (HIGH is the voltage level)
     delay(50);                      // wait for a second
@@ -58,6 +61,7 @@ void setup()
 {
   Serial.begin(57600);
   pinMode(13, OUTPUT);
+  pinMode(buttonPin, INPUT);
   digitalWrite(13, HIGH);
   Wire.setClock(400000);
   Wire.begin();
@@ -77,15 +81,23 @@ void loop()
   Serial.print(" Acceleration Y [g]= ");
   Serial.print(AccY);
   */
-
   Serial.print(" Acceleration Z [g]= ");
   Serial.println(AccZ);
+  Serial.println(toggle);
+
+  buttonState = digitalRead(buttonPin);
+  if(toggle && buttonState)
+  {
+    toggle = false;
+  }
+  else if(buttonState)
+  {
+    toggle = true;
+  }
 
   if(AccZ <= 0)
   {
     parachute_event();
   }
-
-
-  delay(50);
+  delay(200);
 }
