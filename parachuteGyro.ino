@@ -1,14 +1,21 @@
 #include <Wire.h>
+#include <Servo.h>
+
 float RateRoll, RatePitch, RateYaw;
 float AccX, AccY, AccZ;
 float AngleRoll, AnglePitch;
 float LoopTimer;
 
 int buttonPin = 2;
+int servoPin = 6;
+
 bool buttonState = false;
 bool toggle = true;
+bool end = false;
 
 int LEDpin = 3;
+
+Servo servo; 
 
 void gyro_signals(void) 
 {
@@ -46,6 +53,7 @@ void gyro_signals(void)
   AccZ=(float)AccZLSB/4096  + .07;
   AngleRoll=atan(AccY/sqrt(AccX*AccX+AccZ*AccZ))*1/(3.142/180);
   AnglePitch=-atan(AccX/sqrt(AccY*AccY+AccZ*AccZ))*1/(3.142/180);
+
 }
 
 void parachute_event(void)
@@ -56,7 +64,10 @@ void parachute_event(void)
     delay(50);                      // wait for a second
     digitalWrite(LEDpin, LOW);   // turn the LED off by making the voltage LOW
     delay(50);
+
+    servo.write(158);
   }
+
 }
 
 void setup() 
@@ -75,6 +86,9 @@ void setup()
   Wire.write(0x6B);
   Wire.write(0x00);
   Wire.endTransmission();
+
+  servo.attach(6);
+  servo.write(0);
 }
 
 void loop() 
@@ -113,5 +127,6 @@ void loop()
   {
     digitalWrite(LEDpin,LOW);
   }
-  delay(200);
+
+  delay(50);
 }
