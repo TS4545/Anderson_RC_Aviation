@@ -6,7 +6,9 @@ float LoopTimer;
 
 int buttonPin = 2;
 bool buttonState = false;
-bool toggle = false;
+bool toggle = true;
+
+int LEDpin = 3;
 
 void gyro_signals(void) 
 {
@@ -50,19 +52,22 @@ void parachute_event(void)
 { 
   if(toggle)
   {
-    digitalWrite(LED_BUILTIN, HIGH);  // turn the LED on (HIGH is the voltage level)
+    digitalWrite(LEDpin, HIGH);  // turn the LED on (HIGH is the voltage level)
     delay(50);                      // wait for a second
-    digitalWrite(LED_BUILTIN, LOW);   // turn the LED off by making the voltage LOW
+    digitalWrite(LEDpin, LOW);   // turn the LED off by making the voltage LOW
     delay(50);
   }
 }
 
 void setup() 
 {
+
   Serial.begin(57600);
-  pinMode(13, OUTPUT);
+
+  pinMode(LEDpin,OUTPUT);
+  digitalWrite(LEDpin, HIGH);
+
   pinMode(buttonPin, INPUT);
-  digitalWrite(13, HIGH);
   Wire.setClock(400000);
   Wire.begin();
   delay(250);
@@ -98,6 +103,15 @@ void loop()
   if(AccZ <= 0)
   {
     parachute_event();
+  }
+
+  if(toggle)
+  {
+    digitalWrite(LEDpin,HIGH);
+  }
+  else
+  {
+    digitalWrite(LEDpin,LOW);
   }
   delay(200);
 }
