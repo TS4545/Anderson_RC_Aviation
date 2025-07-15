@@ -1,0 +1,697 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RC Aviation Club</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #000000 0%, #1a1a1a 50%, #2d2d2d 100%);
+            min-height: 100vh;
+            color: white;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header */
+        .header {
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 100;
+            transition: all 0.3s ease;
+        }
+
+        .nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 0;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: #ffffff;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .plane-icon {
+            font-size: 2rem;
+            animation: fly 3s ease-in-out infinite;
+        }
+
+        @keyframes fly {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-5px) rotate(5deg); }
+        }
+
+        .nav-tabs {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .nav-tab {
+            padding: 0.5rem 1.5rem;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 25px;
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 1rem;
+        }
+
+        .nav-tab:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
+        }
+
+        .nav-tab.active {
+            background: #ffffff;
+            color: #000000;
+            border-color: #ffffff;
+            transform: translateY(-2px);
+        }
+
+        /* Main Content */
+        .main {
+            margin-top: 80px;
+            padding: 2rem 0;
+        }
+
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Hero Section */
+        .hero {
+            text-align: center;
+            padding: 4rem 0;
+            background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5));
+            border-radius: 20px;
+            margin-bottom: 3rem;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            margin-bottom: 1rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+            opacity: 0.9;
+        }
+
+        .cta-button {
+            padding: 1rem 2rem;
+            background: linear-gradient(45deg, #ffffff, #f0f0f0);
+            border: none;
+            border-radius: 30px;
+            color: #000000;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(255, 255, 255, 0.2);
+        }
+
+        .cta-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(255, 255, 255, 0.3);
+        }
+
+        /* Gallery Grid */
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .gallery-item {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 1.5rem;
+            text-align: center;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+
+        .gallery-item:hover {
+            transform: translateY(-5px);
+            background: rgba(255, 255, 255, 0.08);
+            border-color: rgba(255, 255, 255, 0.2);
+        }
+
+        .gallery-image {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 10px;
+            margin-bottom: 1rem;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .gallery-item:hover .gallery-image {
+            transform: scale(1.05);
+        }
+
+        /* Fallback for when images don't load */
+        .gallery-placeholder {
+            width: 100%;
+            height: 200px;
+            background: linear-gradient(45deg, #333333, #555555);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        /* Gallery Tabs */
+        .gallery-tabs {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .gallery-tab {
+            padding: 0.8rem 1.5rem;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 25px;
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 1rem;
+        }
+
+        .gallery-tab:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: rgba(255, 255, 255, 0.3);
+        }
+
+        .gallery-tab.active {
+            background: #ffffff;
+            color: #000000;
+            border-color: #ffffff;
+        }
+
+        .gallery-category {
+            display: none;
+        }
+
+        .gallery-category.active {
+            display: block;
+        }
+
+        /* Members Section */
+        .members-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .member-card {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 1.5rem;
+            text-align: center;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+
+        .member-card:hover {
+            transform: translateY(-5px);
+            background: rgba(255, 255, 255, 0.08);
+            border-color: rgba(255, 255, 255, 0.2);
+        }
+
+        .member-avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: linear-gradient(45deg, #333333, #555555);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1rem;
+            font-size: 2rem;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        /* Roadmap */
+        .roadmap-item {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            backdrop-filter: blur(10px);
+            border-left: 4px solid #ffffff;
+        }
+
+        .roadmap-date {
+            color: #ffffff;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+
+        /* Contact Form */
+        .contact-form {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 2rem;
+            backdrop-filter: blur(10px);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #64b5f6;
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 0.8rem;
+            border: none;
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            font-size: 1rem;
+        }
+
+        .form-group input::placeholder,
+        .form-group textarea::placeholder {
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .nav-tabs {
+                gap: 1rem;
+            }
+            
+            .nav-tab {
+                padding: 0.4rem 1rem;
+                font-size: 0.9rem;
+            }
+            
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+            
+            .hero p {
+                font-size: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <nav class="nav">
+                <div class="logo">
+                    <span class="plane-icon">✈️</span>
+                    RC Aviation Club
+                </div>
+                <div class="nav-tabs">
+                    <button class="nav-tab active" onclick="showTab('home')">Home</button>
+                    <button class="nav-tab" onclick="showTab('gallery')">Gallery</button>
+                    <button class="nav-tab" onclick="showTab('members')">Members</button>
+                    <button class="nav-tab" onclick="showTab('roadmap')">Roadmap</button>
+                    <button class="nav-tab" onclick="showTab('contact')">Contact</button>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <main class="main">
+        <div class="container">
+            <!-- Home Tab -->
+            <div id="home" class="tab-content active">
+                <div class="hero">
+                    <h1>Welcome to RC Aviation Club</h1>
+                    <p>Build, Fly, Crash, Learn</p>
+                    <button class="cta-button" onclick="showTab('contact')">Join Our Club</button>
+                </div>
+                
+                <div class="gallery-grid">
+                    <div class="gallery-item">
+                        <div class="gallery-placeholder">🛩️</div>
+                        <h3>Build & Fly</h3>
+                        <p>Learn to build and pilot your own RC aircraft with guidance from experienced members.</p>
+                    </div>
+                    <div class="gallery-item">
+                        <div class="gallery-placeholder">🚀</div>
+                        <h3>Rockets</h3>
+                        <p>Design and launch model rockets, exploring principles of propulsion and aerodynamics.</p>
+                    </div>
+                    <div class="gallery-item">
+                        <div class="gallery-placeholder">👥</div>
+                        <h3>Community</h3>
+                        <p>Connect with fellow aviation enthusiasts and share your passion for flight.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Gallery Tab -->
+            <div id="gallery" class="tab-content">
+                <h2 style="text-align: center; margin-bottom: 2rem; font-size: 2.5rem;">Project Gallery</h2>
+                
+                <div class="gallery-tabs">
+                    <button class="gallery-tab active" onclick="showGalleryCategory('planes')">Planes</button>
+                    <button class="gallery-tab" onclick="showGalleryCategory('rockets')">Rockets</button>
+                </div>
+                
+                <div id="planes" class="gallery-category active">
+                    <div class="gallery-grid">
+                        <div class="gallery-item">
+                            <img src="https://drive.google.com/file/uc?id=1MTmOqPykMbyAZhSRIBcXgTx-P87n9zKb" alt="P-51 Mustang RC Aircraft" class="gallery-image">
+                            <h3>P-51 Mustang</h3>
+                            <p>Scale warbird replica with incredible detail and authentic flight characteristics.</p>
+                        </div>
+                        <div class="gallery-item">
+                            <img src="https://via.placeholder.com/300x200/333333/ffffff?text=3D+Helicopter" alt="3D Helicopter" class="gallery-image">
+                            <h3>3D Helicopter</h3>
+                            <p>Advanced aerobatic helicopter capable of inverted flight and complex maneuvers.</p>
+                        </div>
+                        <div class="gallery-item">
+                            <img src="https://via.placeholder.com/300x200/333333/ffffff?text=Trainer+Aircraft" alt="Trainer Aircraft" class="gallery-image">
+                            <h3>Trainer Aircraft</h3>
+                            <p>Perfect for beginners learning the basics of RC flight control.</p>
+                        </div>
+                        <div class="gallery-item">
+                            <img src="https://via.placeholder.com/300x200/333333/ffffff?text=Jet+Fighter" alt="Jet Fighter" class="gallery-image">
+                            <h3>Jet Fighter</h3>
+                            <p>High-speed EDF jet with realistic sound and smoke effects.</p>
+                        </div>
+                        <div class="gallery-item">
+                            <img src="https://via.placeholder.com/300x200/333333/ffffff?text=Glider" alt="Glider Aircraft" class="gallery-image">
+                            <h3>Glider</h3>
+                            <p>Silent soaring aircraft that rides thermals for extended flight times.</p>
+                        </div>
+                        <div class="gallery-item">
+                            <img src="https://via.placeholder.com/300x200/333333/ffffff?text=Experimental" alt="Experimental Aircraft" class="gallery-image">
+                            <h3>Experimental</h3>
+                            <p>Custom-built aircraft pushing the boundaries of RC aviation technology.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div id="rockets" class="gallery-category">
+                    <div class="gallery-grid">
+                        <div class="gallery-item">
+                            <img src="https://via.placeholder.com/300x200/333333/ffffff?text=Basic+Rocket" alt="Basic Model Rocket" class="gallery-image">
+                            <h3>Basic Model Rocket</h3>
+                            <p>Entry-level rocket perfect for learning fundamental principles of rocketry.</p>
+                        </div>
+                        <div class="gallery-item">
+                            <img src="https://via.placeholder.com/300x200/333333/ffffff?text=Precision+Rocket" alt="Precision Rocket" class="gallery-image">
+                            <h3>Precision Rocket</h3>
+                            <p>Advanced rocket designed for accuracy competitions and altitude challenges.</p>
+                        </div>
+                        <div class="gallery-item">
+                            <img src="https://via.placeholder.com/300x200/333333/ffffff?text=Payload+Rocket" alt="Payload Rocket" class="gallery-image">
+                            <h3>Payload Rocket</h3>
+                            <p>Multi-stage rocket capable of carrying scientific instruments and cameras.</p>
+                        </div>
+                        <div class="gallery-item">
+                            <img src="https://via.placeholder.com/300x200/333333/ffffff?text=High-Power+Rocket" alt="High-Power Rocket" class="gallery-image">
+                            <h3>High-Power Rocket</h3>
+                            <p>Advanced propulsion system for experienced rocketeers seeking maximum altitude.</p>
+                        </div>
+                        <div class="gallery-item">
+                            <img src="https://via.placeholder.com/300x200/333333/ffffff?text=Recovery+System" alt="Recovery System" class="gallery-image">
+                            <h3>Recovery System</h3>
+                            <p>Sophisticated parachute and recovery mechanisms for safe landings.</p>
+                        </div>
+                        <div class="gallery-item">
+                            <img src="https://via.placeholder.com/300x200/333333/ffffff?text=Research+Rocket" alt="Research Rocket" class="gallery-image">
+                            <h3>Research Rocket</h3>
+                            <p>Custom-built rocket for atmospheric research and data collection missions.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Members Tab -->
+            <div id="members" class="tab-content">
+                <h2 style="text-align: center; margin-bottom: 2rem; font-size: 2.5rem;">Our Pilots</h2>
+                <div class="members-grid">
+                    <div class="member-card">
+                        <div class="member-avatar">👨‍✈️</div>
+                        <h3>Tyler Samman</h3>
+                        <p><strong>Co-President</strong></p>
+                        <p>Description</p>
+                    </div>
+                    <div class="member-card">
+                        <div class="member-avatar">👩‍✈️</div>
+                        <h3>Lukas Goris</h3>
+                        <p><strong>Co-President</strong></p>
+                        <p>Description</p>
+                    </div>
+                    <div class="member-card">
+                        <div class="member-avatar">👨‍🎓</div>
+                        <h3>Spencer Lipman</h3>
+                        <p><strong>Happiness Officer</strong></p>
+                        <p>Description</p>
+                    </div>
+                    <div class="member-card">
+                        <div class="member-avatar">👩‍🔧</div>
+                        <h3>Brady Samman</h3>
+                        <p><strong>Technical Lead</strong></p>
+                        <p>Aircraft building expert and electronics specialist</p>
+                    </div>
+                    <div class="member-card">
+                        <div class="member-avatar">👨‍💻</div>
+                        <h3>Nancy H</h3>
+                        <p><strong>Media Manager</strong></p>
+                        <p>Drone photography and video production for club events</p>
+                    </div>
+                    <div class="member-card">
+                        <div class="member-avatar">👩‍🏫</div>
+                        <h3>Schaefer Russle</h3>
+                        <p><strong>Safety Officer</strong></p>
+                        <p>Description</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Roadmap Tab -->
+            <div id="roadmap" class="tab-content">
+                <h2 style="text-align: center; margin-bottom: 2rem; font-size: 2.5rem;">Flight Plan 2025</h2>
+                
+                <div class="roadmap-item">
+                    <div class="roadmap-date">September 2025</div>
+                    <h3>Club Launch & First Meeting</h3>
+                    <p>Official club formation, member recruitment, and introduction to RC aviation basics. We'll cover safety protocols, club rules, and demonstrate basic flight principles.</p>
+                </div>
+                
+                <div class="roadmap-item">
+                    <div class="roadmap-date">October 2025</div>
+                    <h3>Build Workshop Series</h3>
+                    <p>Hands-on aircraft building workshops where members construct their first trainer aircraft. Learn about aerodynamics, control systems, and proper assembly techniques.</p>
+                </div>
+                
+                <div class="roadmap-item">
+                    <div class="roadmap-date">November 2025</div>
+                    <h3>First Flight Training</h3>
+                    <p>Begin flight training with instructor supervision. Master basic controls, takeoff, landing, and emergency procedures using flight simulators and trainer aircraft.</p>
+                </div>
+                
+                <div class="roadmap-item">
+                    <div class="roadmap-date">December 2025</div>
+                    <h3>Winter Indoor Flying</h3>
+                    <p>Indoor flying sessions with micro aircraft and foam planes. Perfect for maintaining skills during cold weather and learning precision control.</p>
+                </div>
+                
+                <div class="roadmap-item">
+                    <div class="roadmap-date">March 2026</div>
+                    <h3>Spring Competition Prep</h3>
+                    <p>Prepare for regional competitions with advanced flight training, aerobatic maneuvers, and competitive flying techniques.</p>
+                </div>
+                
+                <div class="roadmap-item">
+                    <div class="roadmap-date">May 2026</div>
+                    <h3>Annual Air Show</h3>
+                    <p>Host our first annual air show featuring member aircraft, demonstrations, and public education about RC aviation. Fundraising for club expansion.</p>
+                </div>
+            </div>
+
+            <!-- Contact Tab -->
+            <div id="contact" class="tab-content">
+                <h2 style="text-align: center; margin-bottom: 2rem; font-size: 2.5rem;">Join Our Squadron</h2>
+                
+                <div class="contact-form">
+                    <form onsubmit="handleSubmit(event)">
+                        <div class="form-group">
+                            <label for="name">Name</label>
+                            <input type="text" id="name" name="name" placeholder="Your full name" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="email">Email</label>
+                            <input type="email" id="email" name="email" placeholder="your.email@example.com" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="grade">Grade Level</label>
+                            <input type="text" id="grade" name="grade" placeholder="e.g., 10th Grade" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="experience">RC Flying Experience</label>
+                            <select id="experience" name="experience" style="width: 100%; padding: 0.8rem; border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 10px; background: rgba(255, 255, 255, 0.05); color: white; font-size: 1rem;">
+                                <option value="">Select experience level</option>
+                                <option value="beginner">Complete Beginner</option>
+                                <option value="some">Some Experience</option>
+                                <option value="intermediate">Intermediate</option>
+                                <option value="advanced">Advanced</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="interests">What interests you most?</label>
+                            <textarea id="interests" name="interests" rows="4" placeholder="Tell us about your aviation interests, goals, or questions..."></textarea>
+                        </div>
+                        
+                        <button type="submit" class="cta-button" style="width: 100%; margin-top: 1rem;">
+                            Take Flight With Us! 🛩️
+                        </button>
+                    </form>
+                </div>
+                
+                <div style="text-align: center; margin-top: 2rem; background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.1); padding: 1.5rem; border-radius: 15px;">
+                    <h3>Meeting Info</h3>
+                    <p><strong>When:</strong> Every Tuesday & Thursday, 3:30 PM - 5:00 PM</p>
+                    <p><strong>Where:</strong> School Gymnasium (Building) & Football Field</p>
+                    <p><strong>Contact:</strong> rcaviation.club@school.edu</p>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        function showTab(tabName) {
+            // Hide all tab contents
+            const tabContents = document.querySelectorAll('.tab-content');
+            tabContents.forEach(content => {
+                content.classList.remove('active');
+            });
+            
+            // Remove active class from all nav tabs
+            const navTabs = document.querySelectorAll('.nav-tab');
+            navTabs.forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            // Show selected tab content
+            document.getElementById(tabName).classList.add('active');
+            
+            // Add active class to clicked nav tab
+            event.target.classList.add('active');
+        }
+
+        function showGalleryCategory(category) {
+            // Hide all gallery categories
+            const categories = document.querySelectorAll('.gallery-category');
+            categories.forEach(cat => {
+                cat.classList.remove('active');
+            });
+            
+            // Remove active class from all gallery tabs
+            const galleryTabs = document.querySelectorAll('.gallery-tab');
+            galleryTabs.forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            // Show selected category
+            document.getElementById(category).classList.add('active');
+            
+            // Add active class to clicked tab
+            event.target.classList.add('active');
+        }
+        
+        function handleSubmit(event) {
+            event.preventDefault();
+            alert('Thanks for your interest! We\'ll contact you soon about joining the RC Aviation Club. Clear skies ahead! ✈️');
+        }
+        
+        // Add scroll effect to header
+        window.addEventListener('scroll', function() {
+            const header = document.querySelector('.header');
+            if (window.scrollY > 50) {
+                header.style.background = 'rgba(0, 0, 0, 0.9)';
+            } else {
+                header.style.background = 'rgba(0, 0, 0, 0.8)';
+            }
+        });
+        
+        // Add hover effects to gallery images
+        const galleryItems = document.querySelectorAll('.gallery-item');
+        galleryItems.forEach((item, index) => {
+            item.addEventListener('mouseenter', function() {
+                const image = this.querySelector('.gallery-image');
+                if (image) {
+                    image.style.transform = 'scale(1.05)';
+                    image.style.transition = 'all 0.3s ease';
+                }
+            });
+            
+            item.addEventListener('mouseleave', function() {
+                const image = this.querySelector('.gallery-image');
+                if (image) {
+                    image.style.transform = 'scale(1)';
+                }
+            });
+        });
+    </script>
+</body>
+</html>
